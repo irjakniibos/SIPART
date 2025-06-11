@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ApartDataSet" targetNamespace="http://tempuri.org/ApartDataSet.xsd" xmlns:mstns="http://tempuri.org/ApartDataSet.xsd" xmlns="http://tempuri.org/ApartDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="SIPARTConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="SIPARTConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.SIPART_LAST.Properties.Settings.GlobalReference.Default.SIPARTConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="DataTable1TableAdapter" GeneratorDataComponentClassName="DataTable1TableAdapter" Name="DataTable1" UserDataComponentName="DataTable1TableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="SIPARTConnectionString (Settings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT ua.UnitID, ua.NomorUnit, ua.Tipe, ua.Status, ks.KontrakID, ks.NamaPenyewa, ks.TanggalMulai, ks.TanggalSelesai
+FROM     UnitApartemen AS ua LEFT OUTER JOIN
+                  KontrakSewa AS ks ON ua.UnitID = ks.UnitID
+WHERE  (ua.Status = 'Disewa')
+ORDER BY ks.TanggalMulai DESC</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="UnitID" DataSetColumn="UnitID" />
+              <Mapping SourceColumn="NomorUnit" DataSetColumn="NomorUnit" />
+              <Mapping SourceColumn="Tipe" DataSetColumn="Tipe" />
+              <Mapping SourceColumn="Status" DataSetColumn="Status" />
+              <Mapping SourceColumn="KontrakID" DataSetColumn="KontrakID" />
+              <Mapping SourceColumn="NamaPenyewa" DataSetColumn="NamaPenyewa" />
+              <Mapping SourceColumn="TanggalMulai" DataSetColumn="TanggalMulai" />
+              <Mapping SourceColumn="TanggalSelesai" DataSetColumn="TanggalSelesai" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ApartDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_UserDSName="ApartDataSet" msprop:Generator_DataSetName="ApartDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_RowClassName="DataTable1Row" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_UserTableName="DataTable1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="UnitID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="UnitID" msprop:Generator_ColumnPropNameInTable="UnitIDColumn" msprop:Generator_ColumnVarNameInTable="columnUnitID" msprop:Generator_UserColumnName="UnitID" type="xs:int" />
+              <xs:element name="NomorUnit" msprop:Generator_ColumnPropNameInRow="NomorUnit" msprop:Generator_ColumnPropNameInTable="NomorUnitColumn" msprop:Generator_ColumnVarNameInTable="columnNomorUnit" msprop:Generator_UserColumnName="NomorUnit">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="6" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Tipe" msprop:Generator_ColumnPropNameInRow="Tipe" msprop:Generator_ColumnPropNameInTable="TipeColumn" msprop:Generator_ColumnVarNameInTable="columnTipe" msprop:Generator_UserColumnName="Tipe">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Status" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_UserColumnName="Status" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="KontrakID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="KontrakID" msprop:Generator_ColumnPropNameInTable="KontrakIDColumn" msprop:Generator_ColumnVarNameInTable="columnKontrakID" msprop:Generator_UserColumnName="KontrakID" type="xs:int" minOccurs="0" />
+              <xs:element name="NamaPenyewa" msprop:Generator_ColumnPropNameInRow="NamaPenyewa" msprop:Generator_ColumnPropNameInTable="NamaPenyewaColumn" msprop:Generator_ColumnVarNameInTable="columnNamaPenyewa" msprop:Generator_UserColumnName="NamaPenyewa" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TanggalMulai" msprop:Generator_ColumnPropNameInRow="TanggalMulai" msprop:Generator_ColumnPropNameInTable="TanggalMulaiColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalMulai" msprop:Generator_UserColumnName="TanggalMulai" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TanggalSelesai" msprop:Generator_ColumnPropNameInRow="TanggalSelesai" msprop:Generator_ColumnPropNameInTable="TanggalSelesaiColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalSelesai" msprop:Generator_UserColumnName="TanggalSelesai" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

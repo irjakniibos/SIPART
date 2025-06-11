@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="KontrakPenyewaDataSet1" targetNamespace="http://tempuri.org/KontrakPenyewaDataSet1.xsd" xmlns:mstns="http://tempuri.org/KontrakPenyewaDataSet1.xsd" xmlns="http://tempuri.org/KontrakPenyewaDataSet1.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="SIPARTConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="SIPARTConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.SIPART_LAST.Properties.Settings.GlobalReference.Default.SIPARTConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="DataTable1TableAdapter" GeneratorDataComponentClassName="DataTable1TableAdapter" Name="DataTable1" UserDataComponentName="DataTable1TableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="SIPARTConnectionString (Settings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT KontrakSewa.KontrakID, KontrakSewa.UnitID, KontrakSewa.NamaPenyewa, KontrakSewa.NoKTP, KontrakSewa.NoTelepon, KontrakSewa.AlamatPenyewa, KontrakSewa.TanggalMulai, KontrakSewa.TanggalSelesai, 
+                  KontrakSewa.StatusKontrak, KontrakSewa.TanggalDibuat, TagihanPembayaran.TagihanID, TagihanPembayaran.JumlahTagihan, TagihanPembayaran.TanggalJatuhTempo
+FROM     KontrakSewa INNER JOIN
+                  TagihanPembayaran ON KontrakSewa.KontrakID = TagihanPembayaran.KontrakID INNER JOIN
+                  UnitApartemen ON KontrakSewa.UnitID = UnitApartemen.UnitID</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="KontrakID" DataSetColumn="KontrakID" />
+              <Mapping SourceColumn="UnitID" DataSetColumn="UnitID" />
+              <Mapping SourceColumn="NamaPenyewa" DataSetColumn="NamaPenyewa" />
+              <Mapping SourceColumn="NoKTP" DataSetColumn="NoKTP" />
+              <Mapping SourceColumn="NoTelepon" DataSetColumn="NoTelepon" />
+              <Mapping SourceColumn="AlamatPenyewa" DataSetColumn="AlamatPenyewa" />
+              <Mapping SourceColumn="TanggalMulai" DataSetColumn="TanggalMulai" />
+              <Mapping SourceColumn="TanggalSelesai" DataSetColumn="TanggalSelesai" />
+              <Mapping SourceColumn="StatusKontrak" DataSetColumn="StatusKontrak" />
+              <Mapping SourceColumn="TanggalDibuat" DataSetColumn="TanggalDibuat" />
+              <Mapping SourceColumn="TagihanID" DataSetColumn="TagihanID" />
+              <Mapping SourceColumn="JumlahTagihan" DataSetColumn="JumlahTagihan" />
+              <Mapping SourceColumn="TanggalJatuhTempo" DataSetColumn="TanggalJatuhTempo" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="KontrakPenyewaDataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_UserDSName="KontrakPenyewaDataSet1" msprop:Generator_DataSetName="KontrakPenyewaDataSet1">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DataTable1" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_RowClassName="DataTable1Row" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_UserTableName="DataTable1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="KontrakID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="KontrakID" msprop:Generator_ColumnPropNameInTable="KontrakIDColumn" msprop:Generator_ColumnVarNameInTable="columnKontrakID" msprop:Generator_UserColumnName="KontrakID" type="xs:int" />
+              <xs:element name="UnitID" msprop:Generator_ColumnPropNameInRow="UnitID" msprop:Generator_ColumnPropNameInTable="UnitIDColumn" msprop:Generator_ColumnVarNameInTable="columnUnitID" msprop:Generator_UserColumnName="UnitID" type="xs:int" />
+              <xs:element name="NamaPenyewa" msprop:Generator_ColumnPropNameInRow="NamaPenyewa" msprop:Generator_ColumnPropNameInTable="NamaPenyewaColumn" msprop:Generator_ColumnVarNameInTable="columnNamaPenyewa" msprop:Generator_UserColumnName="NamaPenyewa">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="NoKTP" msprop:Generator_ColumnPropNameInRow="NoKTP" msprop:Generator_ColumnPropNameInTable="NoKTPColumn" msprop:Generator_ColumnVarNameInTable="columnNoKTP" msprop:Generator_UserColumnName="NoKTP">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="16" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="NoTelepon" msprop:Generator_ColumnPropNameInRow="NoTelepon" msprop:Generator_ColumnPropNameInTable="NoTeleponColumn" msprop:Generator_ColumnVarNameInTable="columnNoTelepon" msprop:Generator_UserColumnName="NoTelepon">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="AlamatPenyewa" msprop:Generator_ColumnPropNameInRow="AlamatPenyewa" msprop:Generator_ColumnPropNameInTable="AlamatPenyewaColumn" msprop:Generator_ColumnVarNameInTable="columnAlamatPenyewa" msprop:Generator_UserColumnName="AlamatPenyewa" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="255" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TanggalMulai" msprop:Generator_ColumnPropNameInRow="TanggalMulai" msprop:Generator_ColumnPropNameInTable="TanggalMulaiColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalMulai" msprop:Generator_UserColumnName="TanggalMulai" type="xs:dateTime" />
+              <xs:element name="TanggalSelesai" msprop:Generator_ColumnPropNameInRow="TanggalSelesai" msprop:Generator_ColumnPropNameInTable="TanggalSelesaiColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalSelesai" msprop:Generator_UserColumnName="TanggalSelesai" type="xs:dateTime" />
+              <xs:element name="StatusKontrak" msprop:Generator_ColumnPropNameInRow="StatusKontrak" msprop:Generator_ColumnPropNameInTable="StatusKontrakColumn" msprop:Generator_ColumnVarNameInTable="columnStatusKontrak" msprop:Generator_UserColumnName="StatusKontrak" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TanggalDibuat" msprop:Generator_ColumnPropNameInRow="TanggalDibuat" msprop:Generator_ColumnPropNameInTable="TanggalDibuatColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalDibuat" msprop:Generator_UserColumnName="TanggalDibuat" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TagihanID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="TagihanID" msprop:Generator_ColumnPropNameInTable="TagihanIDColumn" msprop:Generator_ColumnVarNameInTable="columnTagihanID" msprop:Generator_UserColumnName="TagihanID" type="xs:int" />
+              <xs:element name="JumlahTagihan" msprop:Generator_ColumnPropNameInRow="JumlahTagihan" msprop:Generator_ColumnPropNameInTable="JumlahTagihanColumn" msprop:Generator_ColumnVarNameInTable="columnJumlahTagihan" msprop:Generator_UserColumnName="JumlahTagihan" type="xs:decimal" />
+              <xs:element name="TanggalJatuhTempo" msprop:Generator_ColumnPropNameInRow="TanggalJatuhTempo" msprop:Generator_ColumnPropNameInTable="TanggalJatuhTempoColumn" msprop:Generator_ColumnVarNameInTable="columnTanggalJatuhTempo" msprop:Generator_UserColumnName="TanggalJatuhTempo" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
