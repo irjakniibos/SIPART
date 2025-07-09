@@ -15,7 +15,9 @@ namespace SIPART_LAST
 {
     public partial class ManageKontrakPenyewa : Form
     {
-        private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
+        Koneksi kn = new Koneksi();
+        string connect = "";
+        //private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
 
         public ManageKontrakPenyewa()
         {
@@ -25,6 +27,19 @@ namespace SIPART_LAST
             LoadData();
 
             comboBoxNomorUnit.SelectedIndexChanged += comboBoxNomorUnit_SelectedIndexChanged;
+
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.Resize += (s, e) => panelKontrakSewa();
+            panelKontrakSewa();
+        }
+
+        private void panelKontrakSewa()
+        {
+            // Panel di tengah horizontal, tetapi tetap di atas (misal 40px dari atas)
+            panelKontrak.Left = (this.ClientSize.Width - panelKontrak.Width) / 2;
+            panelKontrak.Top = 40; // Jarak dari atas, bisa diubah sesuai kebutuhan
         }
 
         private void ClearForm()
@@ -40,7 +55,7 @@ namespace SIPART_LAST
 
         private void LoadNomorUnit()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = @"SELECT UnitID, NomorUnit
                              FROM UnitApartemen
@@ -81,7 +96,7 @@ namespace SIPART_LAST
 
         private void LoadData()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = @"SELECT 
                             k.KontrakID,
@@ -122,7 +137,7 @@ namespace SIPART_LAST
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 conn.Open();
                 SqlTransaction trans = conn.BeginTransaction();
@@ -193,7 +208,7 @@ namespace SIPART_LAST
             {
                 int kontrakID = Convert.ToInt32(dgvKontrakPenyewa.CurrentRow.Cells["KontrakID"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
                     string query = @"UPDATE KontrakSewa SET 
                                 UnitID = @UnitID,
@@ -256,7 +271,7 @@ namespace SIPART_LAST
 
                 int kontrakID = Convert.ToInt32(dgvKontrakPenyewa.CurrentRow.Cells["KontrakID"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
                     string query = "DELETE FROM KontrakSewa WHERE KontrakID = @ID";
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -323,7 +338,7 @@ namespace SIPART_LAST
 
             int unitID = Convert.ToInt32(comboBoxNomorUnit.SelectedValue);
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = "SELECT Tipe FROM UnitApartemen WHERE UnitID = @UnitID";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -352,38 +367,45 @@ namespace SIPART_LAST
 
         private void Analyze_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
-                string query = @"
-            SELECT 
-                COUNT(*) AS JumlahKontrakAktif, 
-                AVG(DATEDIFF(DAY, TanggalMulai, TanggalSelesai)) AS DurasiRataRataKontrak
-            FROM KontrakSewa
-            WHERE StatusKontrak = 'Aktif'";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
                 try
                 {
+                    StringBuilder statistik = new StringBuilder();
+                    conn.InfoMessage += (s, args) =>
+                    {
+                        statistik.AppendLine(args.Message);
+                    };
+
                     conn.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    if (reader.Read())
+                    // Aktifkan statistik IO dan TIME
+                    using (SqlCommand cmdStat = new SqlCommand("SET STATISTICS IO ON; SET STATISTICS TIME ON;", conn))
                     {
-                        int jumlahKontrakAktif = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
-                        int durasiRataRataKontrak = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
-
-                        MessageBox.Show(
-                            $"Jumlah Kontrak Aktif: {jumlahKontrakAktif}\n" +
-                            $"Durasi Rata-Rata Kontrak (hari): {durasiRataRataKontrak}",
-                            "Analisis Data Kontrak",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                        cmdStat.ExecuteNonQuery();
                     }
+
+                    // Jalankan query yang ingin dianalisis
+                    string query = @"
+                SELECT 
+                    COUNT(*) AS JumlahKontrakAktif, 
+                    AVG(DATEDIFF(DAY, TanggalMulai, TanggalSelesai)) AS DurasiRataRataKontrak
+                FROM KontrakSewa
+                WHERE StatusKontrak = 'Aktif'";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            // Baca hasil (tidak perlu ditampilkan, hanya untuk trigger statistik)
+                            while (reader.Read()) { }
+                        }
+                    }
+
+                    // Tampilkan hasil statistik
+                    if (statistik.Length > 0)
+                        MessageBox.Show(statistik.ToString(), "STATISTICS INFO");
                     else
-                    {
-                        MessageBox.Show("Tidak ada data kontrak yang ditemukan untuk analisis.", "Analisis Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                        MessageBox.Show("Tidak ada statistik yang diterima.", "STATISTICS INFO");
                 }
                 catch (Exception ex)
                 {
@@ -402,6 +424,16 @@ namespace SIPART_LAST
             FormReportKontrak reportKontrak = new FormReportKontrak();
             reportKontrak.Show();
             this.Hide();
+        }
+
+        private void txtTelepon_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

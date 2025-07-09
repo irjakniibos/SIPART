@@ -69,10 +69,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApartDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="DataSetsTagihan.Designer.cs">
+    <Compile Include="DataSetTagihan.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataSetsTagihan.xsd</DependentUpon>
+      <DependentUpon>DataSetTagihan.xsd</DependentUpon>
     </Compile>
     <Compile Include="FormReportApart.cs">
       <SubType>Form</SubType>
@@ -92,6 +92,7 @@
     <Compile Include="FormTagihan.Designer.cs">
       <DependentUpon>FormTagihan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Koneksi.cs" />
     <Compile Include="KontrakPenyewaDataSet1.cs">
       <DependentUpon>KontrakPenyewaDataSet1.xsd</DependentUpon>
     </Compile>
@@ -164,7 +165,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ReportKontrakpenyewa.rdlc" />
-    <EmbeddedResource Include="ReportTagihanPembayaran.rdlc" />
+    <Content Include="ReportTagihanPembayaran.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="ApartDataSet.xsc">
       <DependentUpon>ApartDataSet.xsd</DependentUpon>
     </None>
@@ -176,16 +179,16 @@
     <None Include="ApartDataSet.xss">
       <DependentUpon>ApartDataSet.xsd</DependentUpon>
     </None>
-    <None Include="DataSetsTagihan.xsc">
-      <DependentUpon>DataSetsTagihan.xsd</DependentUpon>
+    <None Include="DataSetTagihan.xsc">
+      <DependentUpon>DataSetTagihan.xsd</DependentUpon>
     </None>
-    <None Include="DataSetsTagihan.xsd">
+    <None Include="DataSetTagihan.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSetsTagihan.Designer.cs</LastGenOutput>
+      <LastGenOutput>DataSetTagihan.Designer.cs</LastGenOutput>
     </None>
-    <None Include="DataSetsTagihan.xss">
-      <DependentUpon>DataSetsTagihan.xsd</DependentUpon>
+    <None Include="DataSetTagihan.xss">
+      <DependentUpon>DataSetTagihan.xsd</DependentUpon>
     </None>
     <None Include="KontrakPenyewaDataSet1.xsc">
       <DependentUpon>KontrakPenyewaDataSet1.xsd</DependentUpon>

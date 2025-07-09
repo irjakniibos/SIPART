@@ -9,9 +9,22 @@ namespace CRUDOrmas
 {
     public partial class FormReportApart : Form
     {
+        Koneksi kn = new Koneksi();
+        string connect = "";
         public FormReportApart()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.Resize += (s, e) => panelReportApart();
+            panelReportApart();
+        }
+        private void panelReportApart()
+        {
+            // Panel di tengah horizontal, tetapi tetap di atas (misal 40px dari atas)
+            panelReport.Left = (this.ClientSize.Width - panelReport.Width) / 2;
+            panelReport.Top = 40; // Jarak dari atas, bisa diubah sesuai kebutuhan
         }
 
         private void FormReportApart_Load(object sender, EventArgs e)
@@ -27,8 +40,8 @@ namespace CRUDOrmas
             try
             {
                 // Connection string to your database
-                string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;Initial Catalog=SIPART;Integrated Security=True";
-
+                //string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;Initial Catalog=SIPART;Integrated Security=True";
+                connect = kn.connectionString();
                 // SQL query to retrieve the required data from the database
                 string query = @"
                     SELECT ua.UnitID, ua.NomorUnit, ua.Tipe, ua.Status, ks.KontrakID, ks.NamaPenyewa, ks.TanggalMulai, ks.TanggalSelesai
@@ -41,7 +54,7 @@ namespace CRUDOrmas
                 DataTable dt = new DataTable();
 
                 // Use SqlDataAdapter to fill the DataTable with data from the database
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
                     SqlDataAdapter da = new SqlDataAdapter(query, conn);
                     da.Fill(dt);

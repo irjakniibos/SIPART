@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,13 @@ namespace SIPART_LAST
 {
     public partial class ManageTagihanPembayaran : Form
     {
-        private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
+        Koneksi kn = new Koneksi();
+        string connect = "";
 
+
+        // private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
+        private byte[] buktiPembayaranBytes = null;
+        private string buktiPembayaranFileName = "";
         public ManageTagihanPembayaran()
         {
             InitializeComponent();
@@ -25,6 +31,19 @@ namespace SIPART_LAST
 
             // Add event handler for status tagihan change
             comboBoxStatusTagihan.SelectedIndexChanged += ComboBoxStatusTagihan_SelectedIndexChanged;
+
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.Resize += (s, e) => panelTagihanBayar();
+            panelTagihanBayar();
+        }
+
+        private void panelTagihanBayar()
+        {
+            // Panel di tengah horizontal, tetapi tetap di atas (misal 40px dari atas)
+            panelTagihan.Left = (this.ClientSize.Width - panelTagihan.Width) / 2;
+            panelTagihan.Top = 40; // Jarak dari atas, bisa diubah sesuai kebutuhan
         }
 
         private void ClearForm()
@@ -72,13 +91,13 @@ namespace SIPART_LAST
 
         private void LoadNamaPenyewa()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
+                // Tampilkan semua kontrak, bukan hanya yang aktif
                 string query = @"
-                SELECT k.KontrakID, k.NamaPenyewa, k.TanggalMulai, k.TanggalSelesai, u.HargaSewa
-                FROM KontrakSewa k
-                INNER JOIN UnitApartemen u ON k.UnitID = u.UnitID
-                WHERE k.StatusKontrak = 'Aktif'";
+                    SELECT k.KontrakID, k.NamaPenyewa, k.TanggalMulai, k.TanggalSelesai, u.HargaSewa
+                    FROM KontrakSewa k
+                    INNER JOIN UnitApartemen u ON k.UnitID = u.UnitID";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 DataTable dt = new DataTable();
@@ -87,12 +106,11 @@ namespace SIPART_LAST
                 {
                     conn.Open();
                     da.Fill(dt);
-                    comboBoxKontrakID.DisplayMember = "NamaPenyewa"; // Display nama penyewa
-                    comboBoxKontrakID.ValueMember = "KontrakID";    // Value tetap KontrakID
+                    comboBoxKontrakID.DisplayMember = "NamaPenyewa";
+                    comboBoxKontrakID.ValueMember = "KontrakID";
                     comboBoxKontrakID.DataSource = dt;
                     comboBoxKontrakID.SelectedIndex = -1;
 
-                    // Add event handler for selection change
                     comboBoxKontrakID.SelectedIndexChanged += ComboBoxNamaPenyewa_SelectedIndexChanged;
                 }
                 catch (Exception ex)
@@ -139,7 +157,7 @@ namespace SIPART_LAST
 
         private void LoadData()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = @"
             SELECT tp.TagihanID, tp.KontrakID, k.NamaPenyewa, tp.JumlahTagihan, 
@@ -196,7 +214,7 @@ namespace SIPART_LAST
                 }
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 conn.Open();
                 SqlTransaction trans = conn.BeginTransaction();
@@ -271,36 +289,55 @@ namespace SIPART_LAST
         {
             if (dgvTagihanPembayaran.CurrentRow != null)
             {
-                // NEW: Validation untuk status Lunas saat edit
-                if (comboBoxStatusTagihan.Text == "Lunas")
+                object kontrakIDObj = comboBoxKontrakID.SelectedValue;
+                if (kontrakIDObj == null || kontrakIDObj == DBNull.Value)
                 {
-                    if (string.IsNullOrWhiteSpace(txtJumlahBayar.Text))
-                    {
-                        MessageBox.Show("Jumlah bayar tidak boleh kosong untuk status Lunas!");
-                        return;
-                    }
-                    if (comboBoxMetodePembayaran.SelectedIndex == -1)
-                    {
-                        MessageBox.Show("Pilih metode pembayaran untuk status Lunas!");
-                        return;
-                    }
+                    MessageBox.Show("Nama penyewa/KontrakID belum dipilih atau tidak valid.");
+                    return;
+                }
+                int kontrakID;
+                if (!int.TryParse(kontrakIDObj.ToString(), out kontrakID))
+                {
+                    MessageBox.Show("KontrakID tidak valid.");
+                    return;
                 }
 
                 int tagihanID = Convert.ToInt32(dgvTagihanPembayaran.CurrentRow.Cells["TagihanID"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
+                    // Ambil data lama jika tidak ada file baru
+                    byte[] buktiLama = null;
+                    if (buktiPembayaranBytes == null)
+                    {
+                        conn.Open();
+                        using (SqlCommand getBukti = new SqlCommand("SELECT BuktiPembayaran FROM TagihanPembayaran WHERE TagihanID = @ID", conn))
+                        {
+                            getBukti.Parameters.AddWithValue("@ID", tagihanID);
+                            object result = getBukti.ExecuteScalar();
+                            if (result != DBNull.Value && result != null)
+                                buktiLama = (byte[])result;
+                        }
+                        conn.Close();
+                    }
+
                     string query = @"
-                    UPDATE TagihanPembayaran SET
-                        KontrakID = @KontrakID, JumlahTagihan = @JumlahTagihan, TanggalTerbit = @TanggalTerbit,
-                        TanggalJatuhTempo = @TanggalJatuhTempo, StatusTagihan = @StatusTagihan,
-                        TanggalPembayaran = @TanggalPembayaran, JumlahBayar = @JumlahBayar,
-                        MetodePembayaran = @MetodePembayaran, TanggalInputPembayaran = @TanggalInput,
-                        Keterangan = @Keterangan
-                    WHERE TagihanID = @TagihanID";
+                UPDATE TagihanPembayaran SET
+                    KontrakID = @KontrakID, 
+                    JumlahTagihan = @JumlahTagihan, 
+                    TanggalTerbit = @TanggalTerbit,
+                    TanggalJatuhTempo = @TanggalJatuhTempo, 
+                    StatusTagihan = @StatusTagihan,
+                    TanggalPembayaran = @TanggalPembayaran, 
+                    JumlahBayar = @JumlahBayar,
+                    MetodePembayaran = @MetodePembayaran, 
+                    TanggalInputPembayaran = @TanggalInput,
+                    Keterangan = @Keterangan, 
+                    BuktiPembayaran = @BuktiPembayaran
+                WHERE TagihanID = @TagihanID";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@KontrakID", comboBoxKontrakID.SelectedValue);
+                    cmd.Parameters.AddWithValue("@KontrakID", kontrakID);
                     cmd.Parameters.AddWithValue("@JumlahTagihan", Convert.ToDecimal(txtJumlahTagihan.Text));
                     cmd.Parameters.AddWithValue("@TanggalTerbit", dateTerbit.Value);
                     cmd.Parameters.AddWithValue("@TanggalJatuhTempo", dateJatuhTempo.Value);
@@ -327,6 +364,8 @@ namespace SIPART_LAST
                         string.IsNullOrWhiteSpace(txtKeterangan.Text)
                         ? (object)DBNull.Value : txtKeterangan.Text);
 
+                    // Perbaikan di sini:
+                    cmd.Parameters.AddWithValue("@BuktiPembayaran", buktiPembayaranBytes ?? (object)buktiLama ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@TagihanID", tagihanID);
 
                     try
@@ -354,7 +393,7 @@ namespace SIPART_LAST
 
                 int tagihanID = Convert.ToInt32(dgvTagihanPembayaran.CurrentRow.Cells["TagihanID"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
                     string query = "DELETE FROM TagihanPembayaran WHERE TagihanID = @ID";
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -392,6 +431,8 @@ namespace SIPART_LAST
                 int kontrakID = Convert.ToInt32(row.Cells["KontrakID"].Value);
                 comboBoxKontrakID.SelectedValue = kontrakID;
 
+                txtNamaPenyewa.Text = row.Cells["NamaPenyewa"].Value?.ToString();
+
                 txtJumlahTagihan.Text = row.Cells["JumlahTagihan"].Value?.ToString();
                 dateTerbit.Value = Convert.ToDateTime(row.Cells["TanggalTerbit"].Value);
                 dateJatuhTempo.Value = Convert.ToDateTime(row.Cells["TanggalJatuhTempo"].Value);
@@ -426,42 +467,100 @@ namespace SIPART_LAST
 
         private void btnAnalyz_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
-                string query = @"
-            SELECT 
-                COUNT(CASE WHEN StatusTagihan = 'Lunas' THEN 1 END) AS JumlahTagihanLunas,
-                COUNT(DISTINCT TanggalTerbit) AS JumlahTanggalTerbit
-            FROM TagihanPembayaran
-            WHERE StatusTagihan = 'Lunas' OR TanggalTerbit IS NOT NULL;";  // Menghitung jumlah tagihan Lunas dan tanggal terbit yang unik
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
                 try
                 {
+                    StringBuilder statistik = new StringBuilder();
+                    conn.InfoMessage += (s, args) =>
+                    {
+                        statistik.AppendLine(args.Message);
+                    };
+
                     conn.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    if (reader.Read())
+                    // Aktifkan statistik IO dan TIME
+                    using (SqlCommand cmdStat = new SqlCommand("SET STATISTICS IO ON; SET STATISTICS TIME ON;", conn))
                     {
-                        int jumlahTagihanLunas = reader.IsDBNull(0) ? 0 : reader.GetInt32(0);
-                        int jumlahTanggalTerbit = reader.IsDBNull(1) ? 0 : reader.GetInt32(1);
-
-                        MessageBox.Show(
-                            $"Jumlah Tagihan Lunas: {jumlahTagihanLunas}\n" +
-                            $"Jumlah Tanggal Terbit yang Unik: {jumlahTanggalTerbit}",
-                            "Analisis Data Tagihan Pembayaran",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                        cmdStat.ExecuteNonQuery();
                     }
+
+                    // Jalankan query yang ingin dianalisis
+                    string query = @"
+                SELECT 
+                    COUNT(CASE WHEN StatusTagihan = 'Lunas' THEN 1 END) AS JumlahTagihanLunas,
+                    COUNT(DISTINCT TanggalTerbit) AS JumlahTanggalTerbit
+                FROM TagihanPembayaran
+                WHERE StatusTagihan = 'Lunas' OR TanggalTerbit IS NOT NULL;";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            // Baca hasil (tidak perlu ditampilkan, hanya untuk trigger statistik)
+                            while (reader.Read()) { }
+                        }
+                    }
+
+                    // Tampilkan hasil statistik
+                    if (statistik.Length > 0)
+                        MessageBox.Show(statistik.ToString(), "STATISTICS INFO");
                     else
-                    {
-                        MessageBox.Show("Tidak ada data yang ditemukan untuk analisis.", "Analisis Data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                        MessageBox.Show("Tidak ada statistik yang diterima.", "STATISTICS INFO");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Terjadi kesalahan saat melakukan analisis: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnBrowseBukti_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Pilih Bukti Pembayaran";
+                ofd.Filter = "Image or PDF Files (*.jpg;*.jpeg;*.png;*.bmp;*.pdf)|*.jpg;*.jpeg;*.png;*.bmp;*.pdf|All Files (*.*)|*.*";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    buktiPembayaranBytes = File.ReadAllBytes(ofd.FileName);
+                    buktiPembayaranFileName = Path.GetFileName(ofd.FileName);
+                    lblBuktiPembayaran.Text = buktiPembayaranFileName;
+                }
+            }
+        }
+
+        private void btnLihatBukti_Click(object sender, EventArgs e)
+        {
+            if (dgvTagihanPembayaran.CurrentRow == null)
+            {
+                MessageBox.Show("Pilih data pembayaran terlebih dahulu!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int tagihanID = Convert.ToInt32(dgvTagihanPembayaran.CurrentRow.Cells["TagihanID"].Value);
+
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
+            {
+                conn.Open();
+                // Ambil dari tabel TagihanPembayaran, bukan DataPembayaran
+                string query = "SELECT BuktiPembayaran FROM TagihanPembayaran WHERE TagihanID = @ID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ID", tagihanID);
+                    object result = cmd.ExecuteScalar();
+                    if (result != DBNull.Value && result != null)
+                    {
+                        byte[] fileBytes = (byte[])result;
+
+                        // Tentukan ekstensi file (opsional, default .jpg)
+                        string tempPath = Path.Combine(Path.GetTempPath(), $"BuktiPembayaran_{tagihanID}.jpg");
+                        File.WriteAllBytes(tempPath, fileBytes);
+                        System.Diagnostics.Process.Start(tempPath);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Bukti pembayaran belum diupload.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
         }

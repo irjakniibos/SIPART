@@ -8,10 +8,25 @@ namespace SIPART_LAST
 {
     public partial class FormReportKontrak : Form
     {
+        Koneksi kn = new Koneksi();
+        string connect = "";
         public FormReportKontrak()
         {
             InitializeComponent();
+
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.Resize += (s, e) => panelReportKontrak();
+            panelReportKontrak();
         }
+        private void panelReportKontrak()
+        {
+            // Panel di tengah horizontal, tetapi tetap di atas (misal 40px dari atas)
+            panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
+            panel1.Top = 40; // Jarak dari atas, bisa diubah sesuai kebutuhan
+        }
+
 
         private void FormReportKontrak_Load(object sender, EventArgs e)
         {
@@ -26,8 +41,8 @@ namespace SIPART_LAST
             try
             {
                 // Connection string to your database
-                string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
-
+                //string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
+                connect = kn.connectionString();
                 // SQL query to retrieve the required data from the database
                 string query = @"
                     SELECT 
@@ -51,7 +66,7 @@ namespace SIPART_LAST
                 DataTable dt = new DataTable();
 
                 // Use SqlDataAdapter to fill the DataTable with data from the database
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(kn.connectionString()))
                 {
                     SqlDataAdapter da = new SqlDataAdapter(query, conn);
                     da.Fill(dt);

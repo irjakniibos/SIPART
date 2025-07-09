@@ -41,7 +41,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtAlamat = new System.Windows.Forms.TextBox();
@@ -56,14 +55,20 @@
             this.txtTipeKamar = new System.Windows.Forms.TextBox();
             this.Analyze = new System.Windows.Forms.Button();
             this.btnReport = new System.Windows.Forms.Button();
+            this.panelKontrak = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvKontrakPenyewa)).BeginInit();
+            this.panelKontrak.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Nama
             // 
+            this.Nama.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.Nama.AutoSize = true;
             this.Nama.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Nama.Location = new System.Drawing.Point(21, 172);
+            this.Nama.Location = new System.Drawing.Point(13, 161);
             this.Nama.Name = "Nama";
             this.Nama.Size = new System.Drawing.Size(125, 20);
             this.Nama.TabIndex = 0;
@@ -71,9 +76,10 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(21, 204);
+            this.label1.Location = new System.Drawing.Point(13, 193);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 20);
             this.label1.TabIndex = 1;
@@ -81,9 +87,10 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(21, 236);
+            this.label2.Location = new System.Drawing.Point(13, 225);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 20);
             this.label2.TabIndex = 2;
@@ -91,9 +98,10 @@
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(21, 269);
+            this.label3.Location = new System.Drawing.Point(13, 258);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(133, 20);
             this.label3.TabIndex = 3;
@@ -101,39 +109,45 @@
             // 
             // txtNamaPenyewa
             // 
-            this.txtNamaPenyewa.Location = new System.Drawing.Point(190, 172);
+            this.txtNamaPenyewa.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtNamaPenyewa.Location = new System.Drawing.Point(182, 161);
             this.txtNamaPenyewa.Name = "txtNamaPenyewa";
             this.txtNamaPenyewa.Size = new System.Drawing.Size(391, 22);
             this.txtNamaPenyewa.TabIndex = 5;
             // 
             // txtKTP
             // 
-            this.txtKTP.Location = new System.Drawing.Point(190, 204);
+            this.txtKTP.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtKTP.Location = new System.Drawing.Point(182, 193);
             this.txtKTP.Name = "txtKTP";
             this.txtKTP.Size = new System.Drawing.Size(391, 22);
             this.txtKTP.TabIndex = 6;
             // 
             // txtTelepon
             // 
-            this.txtTelepon.Location = new System.Drawing.Point(190, 236);
+            this.txtTelepon.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtTelepon.Location = new System.Drawing.Point(182, 225);
             this.txtTelepon.Name = "txtTelepon";
             this.txtTelepon.Size = new System.Drawing.Size(391, 22);
             this.txtTelepon.TabIndex = 7;
+            this.txtTelepon.TextChanged += new System.EventHandler(this.txtTelepon_TextChanged);
             // 
             // dgvKontrakPenyewa
             // 
+            this.dgvKontrakPenyewa.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.dgvKontrakPenyewa.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvKontrakPenyewa.Location = new System.Drawing.Point(601, 74);
+            this.dgvKontrakPenyewa.Location = new System.Drawing.Point(593, 97);
             this.dgvKontrakPenyewa.Name = "dgvKontrakPenyewa";
             this.dgvKontrakPenyewa.RowHeadersWidth = 51;
             this.dgvKontrakPenyewa.RowTemplate.Height = 24;
-            this.dgvKontrakPenyewa.Size = new System.Drawing.Size(579, 374);
+            this.dgvKontrakPenyewa.Size = new System.Drawing.Size(579, 369);
             this.dgvKontrakPenyewa.TabIndex = 12;
             this.dgvKontrakPenyewa.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvKontrakPenyewa_CellClick);
             // 
             // Back
             // 
-            this.Back.Location = new System.Drawing.Point(1089, 454);
+            this.Back.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Back.Location = new System.Drawing.Point(1081, 472);
             this.Back.Name = "Back";
             this.Back.Size = new System.Drawing.Size(91, 39);
             this.Back.TabIndex = 17;
@@ -143,9 +157,10 @@
             // 
             // button1
             // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button1.BackColor = System.Drawing.Color.GreenYellow;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(72, 412);
+            this.button1.Location = new System.Drawing.Point(64, 401);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(105, 36);
             this.button1.TabIndex = 18;
@@ -155,9 +170,10 @@
             // 
             // button2
             // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button2.BackColor = System.Drawing.Color.Yellow;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(183, 412);
+            this.button2.Location = new System.Drawing.Point(175, 401);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 36);
             this.button2.TabIndex = 19;
@@ -167,9 +183,10 @@
             // 
             // button3
             // 
+            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button3.BackColor = System.Drawing.Color.IndianRed;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(294, 412);
+            this.button3.Location = new System.Drawing.Point(286, 401);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(105, 36);
             this.button3.TabIndex = 20;
@@ -179,25 +196,16 @@
             // 
             // button4
             // 
+            this.button4.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.button4.BackColor = System.Drawing.Color.DarkGray;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(405, 412);
+            this.button4.Location = new System.Drawing.Point(397, 401);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(105, 36);
             this.button4.TabIndex = 21;
             this.button4.Text = "Hapus";
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.btnHapus_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Century Gothic", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(326, 23);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(548, 34);
-            this.label4.TabIndex = 22;
-            this.label4.Text = "MANAJEMEN DATA KONTRAK PENYEWA";
             // 
             // label5
             // 
@@ -210,9 +218,10 @@
             // 
             // label6
             // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(21, 108);
+            this.label6.Location = new System.Drawing.Point(13, 97);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(94, 20);
             this.label6.TabIndex = 25;
@@ -220,16 +229,18 @@
             // 
             // txtAlamat
             // 
-            this.txtAlamat.Location = new System.Drawing.Point(190, 269);
+            this.txtAlamat.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtAlamat.Location = new System.Drawing.Point(182, 258);
             this.txtAlamat.Name = "txtAlamat";
             this.txtAlamat.Size = new System.Drawing.Size(391, 22);
             this.txtAlamat.TabIndex = 26;
             // 
             // label7
             // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(21, 306);
+            this.label7.Location = new System.Drawing.Point(13, 295);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(113, 20);
             this.label7.TabIndex = 27;
@@ -237,9 +248,10 @@
             // 
             // label8
             // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(21, 339);
+            this.label8.Location = new System.Drawing.Point(13, 328);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(128, 20);
             this.label8.TabIndex = 28;
@@ -247,9 +259,10 @@
             // 
             // label9
             // 
+            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(21, 369);
+            this.label9.Location = new System.Drawing.Point(13, 358);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(119, 20);
             this.label9.TabIndex = 29;
@@ -257,39 +270,44 @@
             // 
             // dateMulai
             // 
-            this.dateMulai.Location = new System.Drawing.Point(190, 302);
+            this.dateMulai.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.dateMulai.Location = new System.Drawing.Point(182, 291);
             this.dateMulai.Name = "dateMulai";
             this.dateMulai.Size = new System.Drawing.Size(232, 22);
             this.dateMulai.TabIndex = 35;
             // 
             // dateSelesai
             // 
-            this.dateSelesai.Location = new System.Drawing.Point(190, 335);
+            this.dateSelesai.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.dateSelesai.Location = new System.Drawing.Point(182, 324);
             this.dateSelesai.Name = "dateSelesai";
             this.dateSelesai.Size = new System.Drawing.Size(232, 22);
             this.dateSelesai.TabIndex = 36;
             // 
             // comboBoxStatus
             // 
+            this.comboBoxStatus.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.comboBoxStatus.FormattingEnabled = true;
-            this.comboBoxStatus.Location = new System.Drawing.Point(190, 366);
+            this.comboBoxStatus.Location = new System.Drawing.Point(182, 355);
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new System.Drawing.Size(232, 24);
             this.comboBoxStatus.TabIndex = 37;
             // 
             // comboBoxNomorUnit
             // 
+            this.comboBoxNomorUnit.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.comboBoxNomorUnit.FormattingEnabled = true;
-            this.comboBoxNomorUnit.Location = new System.Drawing.Point(190, 110);
+            this.comboBoxNomorUnit.Location = new System.Drawing.Point(182, 99);
             this.comboBoxNomorUnit.Name = "comboBoxNomorUnit";
             this.comboBoxNomorUnit.Size = new System.Drawing.Size(391, 24);
             this.comboBoxNomorUnit.TabIndex = 39;
             // 
             // TipeKamar
             // 
+            this.TipeKamar.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.TipeKamar.AutoSize = true;
             this.TipeKamar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TipeKamar.Location = new System.Drawing.Point(21, 139);
+            this.TipeKamar.Location = new System.Drawing.Point(13, 128);
             this.TipeKamar.Name = "TipeKamar";
             this.TipeKamar.Size = new System.Drawing.Size(95, 20);
             this.TipeKamar.TabIndex = 40;
@@ -297,30 +315,89 @@
             // 
             // txtTipeKamar
             // 
-            this.txtTipeKamar.Location = new System.Drawing.Point(190, 141);
+            this.txtTipeKamar.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtTipeKamar.Location = new System.Drawing.Point(182, 130);
             this.txtTipeKamar.Name = "txtTipeKamar";
             this.txtTipeKamar.Size = new System.Drawing.Size(391, 22);
             this.txtTipeKamar.TabIndex = 41;
             // 
             // Analyze
             // 
-            this.Analyze.Location = new System.Drawing.Point(601, 469);
+            this.Analyze.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Analyze.Location = new System.Drawing.Point(593, 472);
             this.Analyze.Name = "Analyze";
-            this.Analyze.Size = new System.Drawing.Size(75, 23);
+            this.Analyze.Size = new System.Drawing.Size(75, 39);
             this.Analyze.TabIndex = 42;
-            this.Analyze.Text = "analisis";
+            this.Analyze.Text = "Analisis";
             this.Analyze.UseVisualStyleBackColor = true;
             this.Analyze.Click += new System.EventHandler(this.Analyze_Click);
             // 
             // btnReport
             // 
-            this.btnReport.Location = new System.Drawing.Point(731, 469);
+            this.btnReport.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnReport.Location = new System.Drawing.Point(674, 472);
             this.btnReport.Name = "btnReport";
-            this.btnReport.Size = new System.Drawing.Size(75, 23);
+            this.btnReport.Size = new System.Drawing.Size(82, 39);
             this.btnReport.TabIndex = 43;
             this.btnReport.Text = "Report";
             this.btnReport.UseVisualStyleBackColor = true;
             this.btnReport.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // panelKontrak
+            // 
+            this.panelKontrak.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panelKontrak.Controls.Add(this.btnReport);
+            this.panelKontrak.Controls.Add(this.panel1);
+            this.panelKontrak.Controls.Add(this.Analyze);
+            this.panelKontrak.Controls.Add(this.comboBoxNomorUnit);
+            this.panelKontrak.Controls.Add(this.txtTipeKamar);
+            this.panelKontrak.Controls.Add(this.Nama);
+            this.panelKontrak.Controls.Add(this.TipeKamar);
+            this.panelKontrak.Controls.Add(this.label1);
+            this.panelKontrak.Controls.Add(this.label2);
+            this.panelKontrak.Controls.Add(this.comboBoxStatus);
+            this.panelKontrak.Controls.Add(this.label3);
+            this.panelKontrak.Controls.Add(this.dateSelesai);
+            this.panelKontrak.Controls.Add(this.txtNamaPenyewa);
+            this.panelKontrak.Controls.Add(this.dateMulai);
+            this.panelKontrak.Controls.Add(this.txtKTP);
+            this.panelKontrak.Controls.Add(this.label9);
+            this.panelKontrak.Controls.Add(this.txtTelepon);
+            this.panelKontrak.Controls.Add(this.label8);
+            this.panelKontrak.Controls.Add(this.dgvKontrakPenyewa);
+            this.panelKontrak.Controls.Add(this.label7);
+            this.panelKontrak.Controls.Add(this.Back);
+            this.panelKontrak.Controls.Add(this.txtAlamat);
+            this.panelKontrak.Controls.Add(this.button1);
+            this.panelKontrak.Controls.Add(this.label6);
+            this.panelKontrak.Controls.Add(this.button2);
+            this.panelKontrak.Controls.Add(this.button3);
+            this.panelKontrak.Controls.Add(this.button4);
+            this.panelKontrak.Location = new System.Drawing.Point(2, 1);
+            this.panelKontrak.Name = "panelKontrak";
+            this.panelKontrak.Size = new System.Drawing.Size(1189, 523);
+            this.panelKontrak.TabIndex = 44;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.BackColor = System.Drawing.Color.Transparent;
+            this.label10.Font = new System.Drawing.Font("Gill Sans Ultra Bold", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(230, 18);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(717, 42);
+            this.label10.TabIndex = 23;
+            this.label10.Text = "MANAJEMEN DATA KONTRAK PENYEWA";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.DarkGray;
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Location = new System.Drawing.Point(3, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1186, 72);
+            this.panel1.TabIndex = 24;
             // 
             // ManageKontrakPenyewa
             // 
@@ -328,38 +405,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(1192, 524);
-            this.Controls.Add(this.btnReport);
-            this.Controls.Add(this.Analyze);
-            this.Controls.Add(this.txtTipeKamar);
-            this.Controls.Add(this.TipeKamar);
-            this.Controls.Add(this.comboBoxNomorUnit);
-            this.Controls.Add(this.comboBoxStatus);
-            this.Controls.Add(this.dateSelesai);
-            this.Controls.Add(this.dateMulai);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.txtAlamat);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.Back);
-            this.Controls.Add(this.dgvKontrakPenyewa);
-            this.Controls.Add(this.txtTelepon);
-            this.Controls.Add(this.txtKTP);
-            this.Controls.Add(this.txtNamaPenyewa);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.Nama);
+            this.Controls.Add(this.panelKontrak);
             this.Name = "ManageKontrakPenyewa";
             this.Text = "FormKontrakPenyewa";
             this.Load += new System.EventHandler(this.ManageKontrakPenyewa_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvKontrakPenyewa)).EndInit();
+            this.panelKontrak.ResumeLayout(false);
+            this.panelKontrak.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -380,7 +435,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtAlamat;
@@ -395,5 +449,8 @@
         private System.Windows.Forms.TextBox txtTipeKamar;
         private System.Windows.Forms.Button Analyze;
         private System.Windows.Forms.Button btnReport;
+        private System.Windows.Forms.Panel panelKontrak;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label10;
     }
 }

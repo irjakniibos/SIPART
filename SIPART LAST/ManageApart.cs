@@ -15,7 +15,9 @@ namespace SIPART_LAST
 {
     public partial class ManageApart : Form
     {
-        private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
+        Koneksi kn = new Koneksi();
+        string strKonek = "";
+        //private string connectionString = "Data Source=LAPTOP-9IG4E42U\\IRZALUVSALMA;" + "Initial Catalog=SIPART;Integrated Security=True";
         private int selectedUnitID = -1;
 
         private Dictionary<string, decimal> hargaTipeKamar = new Dictionary<string, decimal>()
@@ -30,16 +32,29 @@ namespace SIPART_LAST
         public ManageApart()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.Resize += (s, e) => panelUnitApart();
+            panelUnitApart();
+
             dgvUnitApart.CellClick += dgvUnitApart_CellClick;
             LoadData();
             InitializeComboBoxStatus();
             InitializeComboBoxTipe();
             comboBoxTipe.SelectedIndexChanged += comboBoxTipe_SelectedIndexChanged;
         }
+        private void panelUnitApart()
+        {
+            // Panel di tengah horizontal, tetapi tetap di atas (misal 40px dari atas)
+            panelUnit.Left = (this.ClientSize.Width - panelUnit.Width) / 2;
+            panelUnit.Top = 40; // Jarak dari atas, bisa diubah sesuai kebutuhan
+        }
+
 
         private void LoadData()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 // Optimized query with WHERE and SELECT for necessary columns
                 string query = @"
@@ -104,7 +119,7 @@ namespace SIPART_LAST
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = @"INSERT INTO UnitApartemen (NomorUnit, Tipe, HargaSewa, Status) 
                              VALUES (@NomorUnit, @Tipe, @HargaSewa, @Status)";
@@ -149,7 +164,7 @@ namespace SIPART_LAST
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();
@@ -191,7 +206,7 @@ namespace SIPART_LAST
             DialogResult confirm = MessageBox.Show("Yakin ingin menghapus data ini?", "Konfirmasi", MessageBoxButtons.YesNo);
             if (confirm == DialogResult.No) return;
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
                 string query = "DELETE FROM UnitApartemen WHERE UnitID = @UnitID";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -257,54 +272,48 @@ namespace SIPART_LAST
 
         private void btnAnalyze_Click(object sender, EventArgs e)
         {
-            string connectionString = @"Data Source=LAPTOP-9IG4E42U\IRZALUVSALMA;Initial Catalog=SIPART;Integrated Security=True";
-
-            string query = @"
-        SELECT UnitID, NomorUnit, Tipe, HargaSewa, Status
-        FROM UnitApartemen
-        WHERE Status = 'Tersedia'
-        ORDER BY HargaSewa ASC";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(kn.connectionString()))
             {
-                SqlCommand cmd = new SqlCommand(query, conn);
-
                 try
                 {
+                    StringBuilder statistik = new StringBuilder();
+                    conn.InfoMessage += (s, args) =>
+                    {
+                        statistik.AppendLine(args.Message);
+                    };
+
                     conn.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    StringBuilder result = new StringBuilder();
-                    int count = 0;
-
-                    while (reader.Read())
+                    // Aktifkan statistik IO dan TIME
+                    using (SqlCommand cmdStat = new SqlCommand("SET STATISTICS IO ON; SET STATISTICS TIME ON;", conn))
                     {
-                        count++;
-                        int unitID = reader.GetInt32(0);
-                        string nomorUnit = reader.GetString(1);
-                        string tipe = reader.GetString(2);
-                        decimal hargaSewa = reader.GetDecimal(3);
-                        string status = reader.GetString(4);
-
-                        result.AppendLine(
-                            $"UnitID: {unitID} | Nomor: {nomorUnit} | Tipe: {tipe} | Harga: {hargaSewa:C} | Status: {status}");
+                        cmdStat.ExecuteNonQuery();
                     }
 
-                    if (count > 0)
+                    // Jalankan query yang ingin dianalisis
+                    string query = @"
+                SELECT UnitID, NomorUnit, Tipe, HargaSewa, Status
+                FROM UnitApartemen
+                WHERE Status = 'Tersedia'
+                ORDER BY HargaSewa ASC";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        MessageBox.Show(result.ToString(), $"Unit Tersedia ({count} unit)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            // Anda bisa load ke DataTable jika ingin, tapi tidak wajib untuk statistik
+                            while (reader.Read()) { /* Kosongkan, hanya untuk trigger statistik */ }
+                        }
                     }
+
+                    // Tampilkan hasil statistik
+                    if (statistik.Length > 0)
+                        MessageBox.Show(statistik.ToString(), "STATISTICS INFO");
                     else
-                    {
-                        MessageBox.Show("Tidak ada unit apartemen yang tersedia.", "Analisis Unit", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-
-                    reader.Close();
+                        MessageBox.Show("Tidak ada statistik yang diterima.", "STATISTICS INFO");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Terjadi kesalahan saat menganalisis data: " + ex.Message,
-                        "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
